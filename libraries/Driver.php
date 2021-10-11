@@ -11,9 +11,9 @@ class Driver {
 	 * @return null|array{"configuration": Configuration, "bucket": string}
 	 */
 	public static function getConfigurationByName(?string $name = 'default'): ?array {
-		$option = Options::get('packages.s3_io.configuration.' . $name);
+		$option = Options::get('packages.s3_filesystem.configuration.' . $name);
 		if (!$option and (!$name or $name == 'default')) {
-			$option = Options::get('packages.s3_io.configuration');
+			$option = Options::get('packages.s3_filesystem.configuration');
 		}
 		if (!$option or !is_array($option) or
 			(!isset($option['key']) and
