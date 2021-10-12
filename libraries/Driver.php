@@ -75,7 +75,7 @@ class Driver {
 	/**
 	 * @param array<string|int, mixed> $requestHeaders
 	 */
-	public function upload(File\Local $local, string $remote, string $acl = Acl::ACL_PUBLIC_READ, array $requestHeaders = []): void {
+	public function upload(File\Local $local, string $remote, string $acl = Acl::ACL_PUBLIC_READ, array $requestHeaders = []): bool {
 		$remote = $this->normalizePath($remote);
 		try {
 			$this->getConnector()->putObject(
@@ -85,9 +85,11 @@ class Driver {
 				$acl,
 				$requestHeaders
 			);
+			return true;
 		} catch (CannotPutFile $e) {
 			throw new IO\NotFoundException("[{$this->bucket}]:" . $remote);
 		}
+		return false;
 	}
 
 	public function download(string $remote, File\Local $local): bool {

@@ -37,6 +37,18 @@ class File extends BaseFile {
 		}
 		return false;
 	}
+	public function copyFrom(BaseFile $source): bool {
+		if ($source instanceof BaseFile\Local) {
+			return $this->getDriver()->upload($source, $this->getPath());
+		} else {
+			$tmp = new BaseFile\TMP();
+			if ($source->copyTo($tmp)) {
+				return $this->copyFrom($dest);
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * @return void
 	 */
