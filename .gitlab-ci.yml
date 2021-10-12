@@ -9,7 +9,7 @@ static analyse:
   stage: test
   variables:
     GIT_ROOT_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME
-    GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME/packages/s3_filesystem
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME/packages/s3
   before_script:
     - cd $GIT_ROOT_PATH
     - rm -fr base && git clone --depth 1 ${REPO_SERVER_HOST}/jalno/base.git base

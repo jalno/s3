@@ -1,8 +1,8 @@
 <?php
-namespace packages\s3_filesystem;
+namespace packages\s3;
 
 use packages\s3_api\{Connector, Configuration};
-use packages\s3_filesystem\{Driver, File as S3File};
+use packages\s3\{Driver, File as S3File};
 use packages\base\{view\Error, IO\File as BaseFile, IO\Directory as BaseDirectory, IO\ReadException};
 
 class Directory extends BaseDirectory {
@@ -20,7 +20,7 @@ class Directory extends BaseDirectory {
 			}
 		}
 		if (empty($this->driver)) {
-			throw new Error('packages.s3_filesystem.File.getDriver.driver_not_set');
+			throw new Error('packages.s3.File.getDriver.driver_not_set');
 		}
 		return $this->driver;
 	}

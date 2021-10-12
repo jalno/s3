@@ -1,5 +1,5 @@
 <?php
-namespace packages\s3_filesystem;
+namespace packages\s3;
 
 use packages\s3_api\{Acl, Connector, Configuration, Input};
 use packages\s3_api\Exception\{CannotDeleteFile, CannotGetBucket, CannotGetFile, CannotPutFile};
@@ -11,9 +11,9 @@ class Driver {
 	 * @return null|array{"configuration": Configuration, "bucket": string}
 	 */
 	public static function getConfigurationByName(?string $name = 'default'): ?array {
-		$option = Options::get('packages.s3_filesystem.configuration.' . $name);
+		$option = Options::get('packages.s3.configuration.' . $name);
 		if (!$option and (!$name or $name == 'default')) {
-			$option = Options::get('packages.s3_filesystem.configuration');
+			$option = Options::get('packages.s3.configuration');
 		}
 		if (!$option or !is_array($option) or
 			(!isset($option['key']) and
