@@ -1,7 +1,7 @@
 <?php
 namespace packages\s3_filesystem;
 
-use packages\aws_s3_api\{Connector, Configuration};
+use packages\s3_api\{Connector, Configuration};
 use packages\s3_filesystem\{Driver, File as S3File};
 use packages\base\{view\Error, IO\File as BaseFile, IO\Directory as BaseDirectory, IO\ReadException};
 

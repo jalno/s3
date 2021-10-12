@@ -3,5 +3,5 @@
 	"autoload": {
 		"directories": ["libraries"]
 	},
-	"dependencies": ["base", "aws_s3_api"]
+	"dependencies": ["base", "s3_api"]
 }

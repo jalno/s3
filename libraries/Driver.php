@@ -1,8 +1,8 @@
 <?php
 namespace packages\s3_filesystem;
 
-use packages\aws_s3_api\{Acl, Connector, Configuration, Input};
-use packages\aws_s3_api\Exception\{CannotDeleteFile, CannotGetBucket, CannotGetFile, CannotPutFile};
+use packages\s3_api\{Acl, Connector, Configuration, Input};
+use packages\s3_api\Exception\{CannotDeleteFile, CannotGetBucket, CannotGetFile, CannotPutFile};
 use packages\base\{IO, IO\File, Options};
 
 class Driver {
