@@ -89,7 +89,6 @@ class Driver {
 		} catch (CannotPutFile $e) {
 			throw new IO\NotFoundException("[{$this->bucket}]:" . $remote);
 		}
-		return false;
 	}
 
 	public function download(string $remote, File\Local $local): bool {

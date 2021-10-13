@@ -43,7 +43,7 @@ class File extends BaseFile {
 		} else {
 			$tmp = new BaseFile\TMP();
 			if ($source->copyTo($tmp)) {
-				return $this->copyFrom($dest);
+				return $this->copyFrom($source);
 			}
 		}
 		return false;

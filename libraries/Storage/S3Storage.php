@@ -1,14 +1,14 @@
 <?php
 namespace packages\s3\Storage;
 
-use packages\base\{IO\Node, IO\Directory, Router, Exception, Storage};
+use packages\base\{IO\Node, IO\Directory, Router, Exception, Storage, Storage\AccessForbiddenException};
 use packages\s3_api\{Configuration, Connector};
 use packages\s3\{Directory as S3Directory, Driver as S3Driver};
 
 class S3Storage extends Storage {
 
 	/**
-	 * @param array{"@class":class-string<S3Storage>,"root":string,"type":"public"|"protected"|"private","@relative-to"?:string}
+	 * @param array{"@class":class-string<S3Storage>, "type":"public"|"protected"|"private", "key":string, "secret":string, "bucket":string, "root"?:string, "endpoint"?:string, "region"?:string, "signature"?:"v2"|"v4"} $data
 	 */
 	public static function fromArray(array $data): self {
 		foreach (array('type', 'key', 'secret', 'bucket') as $item) {
@@ -20,7 +20,10 @@ class S3Storage extends Storage {
 			}
 		}
 		foreach (array('type', 'key', 'secret', 'bucket', 'endpoint', 'region', 'signature', 'root') as $item) {
-			if (isset($data[$item]) and !is_string($data[$item])) {
+			if (!isset($data[$item])) {
+				continue;
+			}
+			if (!is_string($data[$item])) {
 				throw new Exception("'{$item}' value is not string");
 			}
 		}
@@ -34,11 +37,15 @@ class S3Storage extends Storage {
 		if (isset($data['legacy_style_path'])) {
 			$configuration->setUseLegacyPathStyle(in_array($data['legacy_style_path'], [1, true, '1', 'on', 'yes', 'true']));
 		}
+		/** @var "private"|"protected"|"public" */
+		$type = $data['type'];
+		/** @var string */
+		$bucket = $data['bucket'];
 
-		$driver = new S3Driver($configuration, $data['bucket']);
+		$driver = new S3Driver($configuration, $bucket);
 		$data['root'] = new S3Directory($data['root'] ?? '/');
 		$data['root']->setDriver($driver);
-		return new self($data['type'], $data['root'], $configuration, $data['bucket']);
+		return new self($type, $data['root'], $configuration, $bucket);
 	}
 
 	protected string $bucket;
@@ -47,7 +54,7 @@ class S3Storage extends Storage {
 	public function __construct(string $type, Directory $root, Configuration $configuration, string $bucket) {
 		parent::__construct($type, $root);
 		if (!$this->root->exists()) {
-			$this->root->make(true);
+			$this->root->make();
 		}
 		$this->bucket = $bucket;
 		$this->configuration = $configuration;
