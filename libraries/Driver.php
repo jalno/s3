@@ -73,7 +73,7 @@ class Driver {
 	}
 
 	/**
-	 * @param array<string|int, mixed> $requestHeaders
+	 * @param array<string, string> $requestHeaders
 	 */
 	public function upload(File\Local $local, string $remote, string $acl = Acl::ACL_PUBLIC_READ, array $requestHeaders = []): bool {
 		$remote = $this->normalizePath($remote);
@@ -105,7 +105,7 @@ class Driver {
 		}
 	}
 	/**
-	 * @param array<string|int, mixed> $requestHeaders
+	 * @param array<string, string> $requestHeaders
 	 */
 	public function put_contents(string $remote, string $data, string $acl = Acl::ACL_PUBLIC_READ, array $requestHeaders = []): bool {
 		$remote = $this->normalizePath($remote);
@@ -209,7 +209,8 @@ class Driver {
 		$result = $this->getConnector()->getBucket($this->bucket, $remote, null, null, '/', true);
 		$lenght = strlen($remote);
 		foreach ($result as $key => $val) {
-			if (substr($val['name'] ?? $val['prefix'], 0, $lenght) == $remote) {
+			$name = $val['name'] ?? $val['prefix'] ?? null;
+			if ($name and substr($name, 0, $lenght) == $remote) {
 				return true;
 			}
 		}
@@ -224,7 +225,7 @@ class Driver {
 		$remote = rtrim($this->normalizePath($remote), '/') . '/';
 		$items = $this->directoryItems($remote, true);
 		foreach ($items as $item) {
-			$parts = explode('/', ($item['name'] ?? $item['prefix']));
+			$parts = explode('/', ($item['name'] ?? $item['prefix'] ?? ''));
 			$count = count($parts) - 1; // don't care about last part, it may be empty or file name
 
 			$path = '';
@@ -245,7 +246,12 @@ class Driver {
 	}
 
 	/**
-	 * @return array<string, array{"name": string, "prefix": string}>
+	 * @return  array<string, array{
+	 * 	"name": string,
+	 * 	"time": int,
+	 * 	"size": int,
+	 * 	"hash": string
+	 * }>
 	 */
 	public function directoryFiles(string $remote, bool $recursively = false): array {
 		return array_filter(
@@ -255,7 +261,14 @@ class Driver {
 	}
 
 	/**
-	 * @return array<string, array{"name": string, "prefix": string}>
+	 * @return  array<string, array{
+	 * 	"name": string,
+	 * 	"time": int,
+	 * 	"size": int,
+	 * 	"hash": string
+	 * }|array{
+	 * 	"prefix": string
+	 * }>
 	 */
 	public function directoryItems(string $remote, bool $recursively = false): array {
 		$remote = rtrim($this->normalizePath($remote), '/') . '/';

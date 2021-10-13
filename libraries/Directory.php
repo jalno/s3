@@ -79,7 +79,7 @@ class Directory extends BaseDirectory {
 	public function items(bool $recursively = true): array {
 		$rawItems = $this->getDriver()->directoryItems($this->getPath(), $recursively);
 		return array_map(function (array $item) {
-			$name = $item['name'] ?? $item['prefix'];
+			$name = $item['name'] ?? $item['prefix'] ?? '';
 			$node = (substr($name, -1) !== '/') ?
 				new S3File($name) :
 				new self($name);
