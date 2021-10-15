@@ -1,6 +1,9 @@
 parameters:
   level: max
+  paths:
+    - .
   scanDirectories:
-    - ../
+    - ../base
+    - ../s3_api
   ignoreErrors:
     - "/(Class|Interface|Trait) .+ referenced with incorrect case/"
