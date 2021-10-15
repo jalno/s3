@@ -1,0 +1,20 @@
+stages:
+  - test
+
+variables:
+  REPO_SERVER_HOST: ${CI_SERVER_PROTOCOL}://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}:${CI_SERVER_PORT}
+
+static analyse:
+  image: registry.git.jeyserver.com/jalno/phpstan:master
+  stage: test
+  variables:
+    GIT_ROOT_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME/packages/s3
+  before_script:
+    - cd $GIT_ROOT_PATH
+    - rm -fr base && git clone --depth 1 ${REPO_SERVER_HOST}/jalno/base.git base
+    - cd ${GIT_ROOT_PATH} && cp -Rf base/* . && cd packages
+    - rm -fr PhpParser && git clone --depth 1 ${REPO_SERVER_HOST}/yeganemehr/PhpParser.git
+    - rm -fr s3_api && git clone --depth 1 ${REPO_SERVER_HOST}/hosni/s3_api.git
+  script:
+    - phpstan analyse -c $GIT_CLONE_PATH/phpstan.neon $GIT_CLONE_PATH

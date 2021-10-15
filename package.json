@@ -1,0 +1,7 @@
+{
+	"permissions": "*",
+	"autoload": {
+		"directories": ["libraries"]
+	},
+	"dependencies": ["base", "s3_api"]
+}
