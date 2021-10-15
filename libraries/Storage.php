@@ -60,9 +60,6 @@ class Storage extends StorageAbstract
     public function __construct(string $type, DirectoryAbstract $root, Configuration $configuration, string $bucket)
     {
         parent::__construct($type, $root);
-        if (!$this->root->exists()) {
-            $this->root->make();
-        }
         $this->bucket = $bucket;
         $this->configuration = $configuration;
     }
