@@ -127,31 +127,32 @@ class File extends BaseFile
         return $directory;
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        $data = [
+        $driver = $this->getDriver();
+        return [
             'directory' => $this->directory,
             'basename' => $this->basename,
-            'driver' => null,
+            'driver' => [
+                'bucket' => $driver->getBucket(),
+                'configuration' => $driver->getConfiguration(),
+            ],
         ];
-
-        $driver = $this->getDriver();
-        $data['driver'] = [
-            'bucket' => $driver->getBucket(),
-            'configuration' => $driver->getConfiguration(),
-        ];
-
-        return serialize($data);
     }
 
-    public function unserialize($data): void
+    /**
+     * @param array{directory?:string,basename?:string,driver?:array{bucket?:string,configuration?:\packages\s3_api\Configuration}} $data
+     */
+    public function __unserialize(array $data): void
     {
-        $data = unserialize($data);
+        if (isset($data['directory'])) {
+            $this->directory = $data['directory'];
+        }
+        if (isset($data['basename'])) {
+            $this->basename = $data['basename'];
+        }
 
-        $this->directory = $data['directory'] ?? null;
-        $this->basename = $data['basename'] ?? null;
-
-        if ($data['driver'] and
+        if (isset($data['driver']) and
             isset($data['driver']['bucket']) and
             isset($data['driver']['configuration'])
         ) {
