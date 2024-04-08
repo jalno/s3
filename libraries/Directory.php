@@ -154,6 +154,9 @@ class Directory extends BaseDirectory
         return $directory;
     }
 
+    /**
+     * @return array{directory:string,basename:string,driver:array{bucket:string,configuration:\packages\s3_api\Configuration}}
+     */
     public function __serialize(): array
     {
         $driver = $this->getDriver();
