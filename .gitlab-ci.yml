@@ -12,9 +12,9 @@ static analyse:
     GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME/packages/s3
   before_script:
     - cd $GIT_ROOT_PATH
-    - rm -fr base && git clone --depth 1 ${REPO_SERVER_HOST}/jalno/base.git base
+    - rm -fr base && git clone --depth 1 https://github.com/jalno/base.git base
     - cd ${GIT_ROOT_PATH} && cp -Rf base/* . && cd packages
-    - rm -fr PhpParser && git clone --depth 1 ${REPO_SERVER_HOST}/yeganemehr/PhpParser.git
+    - rm -fr PhpParser && git clone --depth 1 https://github.com/jalno/PhpParser.git
     - rm -fr s3_api && git clone --depth 1 ${REPO_SERVER_HOST}/hosni/s3_api.git
   script:
     - phpstan analyse -c $GIT_CLONE_PATH/phpstan.neon $GIT_CLONE_PATH
